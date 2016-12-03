@@ -11,7 +11,7 @@
         style="?android:listSeparatorTextViewStyle"/>
 
     <EditText
-        android:id="@+id/crime_title"
+        android:id="@+id/crime_title_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/crime_title_hint"/>
@@ -23,14 +23,14 @@
         style="?android:listSeparatorTextViewStyle"/>
 
     <Button
-        android:id="@+id/crime_date"
+        android:id="@+id/crime_date_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"/>
 
     <CheckBox
-        android:id="@+id/crime_solved"
+        android:id="@+id/crime_solved_checkbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
