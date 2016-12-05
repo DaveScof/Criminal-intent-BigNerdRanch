@@ -1,5 +1,8 @@
 package com.qene.android.criminalintent;
 
+
+import android.text.format.DateFormat;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,8 +16,10 @@ public class Crime {
     private Date mDate;
     private boolean mSolved;
 
-    public Date getDate() {
-        return mDate;
+    public String getDate() {
+
+        // This should be edited out!! Seriously
+        return DateFormat.format("dd/mm/yyyy",mDate).toString();
     }
 
     public void setDate(Date date) {
