@@ -1,5 +1,6 @@
 package com.qene.android.criminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,6 +26,8 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
 
+    private static final int REQUEST_CODE_DATA_CHANGE = 0;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,12 +36,12 @@ public class CrimeListFragment extends Fragment {
 
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        updateUI();
+        updateUI(0);
         
         return view;
     }
 
-    private void updateUI(){
+    private void updateUI(int changePosition){
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
 
@@ -47,15 +50,11 @@ public class CrimeListFragment extends Fragment {
             mCrimeRecyclerView.setAdapter(mAdapter);
         }
         else {
-            mAdapter.notifyDataSetChanged();
+            mAdapter.notifyItemChanged(changePosition);
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        updateUI();
-    }
+
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -90,7 +89,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Intent intent = CrimeActivity.newIntent(getActivity(), mCrime.getID());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
         }
     }
 
@@ -117,6 +116,16 @@ public class CrimeListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mCrimes.size();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK)
+            return;
+        if (requestCode == REQUEST_CODE_DATA_CHANGE){
+            if (CrimeFragment.wasDataChanged(data))
+                updateUI(CrimeFragment.changedPosition(data));
         }
     }
 }

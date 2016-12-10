@@ -87,18 +87,29 @@ public class CrimeFragment extends Fragment {
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mCrime.setSolved(b);
                 mDataChanged = !mDataChanged;
+                setActivityResult();
             }
         });
 
         return view;
     }
 
-    private void setActivityResult (boolean dataChanged){
+
+
+    private void setActivityResult (){
         Intent data = new Intent();
-        data.putExtra(EXTRA_DATA_CHANGED, dataChanged);
+        data.putExtra(EXTRA_DATA_CHANGED, mDataChanged);
         data.putExtra(EXTRA_CHANGE_POSITION, mChangePosition);
 
         getActivity().setResult(Activity.RESULT_OK, data);
+    }
+
+    public static boolean wasDataChanged (Intent result){
+        return result.getBooleanExtra(EXTRA_DATA_CHANGED, false);
+    }
+
+    public static int changedPosition(Intent result){
+        return result.getIntExtra(EXTRA_CHANGE_POSITION, 0);
     }
 
 }
