@@ -38,6 +38,7 @@ public class CrimeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime, container, false);
         mEditText = (EditText) view.findViewById(R.id.crime_title_editText);
+        mEditText.setText(mCrime.getTitle());
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -55,11 +56,13 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+
         mDateButton = (Button) view.findViewById(R.id.crime_date_button);
         mDateButton.setText(mCrime.getDate());
         mDateButton.setEnabled(false);
 
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved_checkbox);
+        mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
