@@ -61,8 +61,4 @@ public class CrimePagerActivity extends FragmentActivity {
         intent.putExtra(EXTRA_CRIME_ID, crimeId);
         return intent;
     }
-
-
-
-
 }
