@@ -1,5 +1,7 @@
 package com.qene.android.criminalintent;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -27,12 +29,17 @@ public class CrimeFragment extends Fragment {
     private EditText mEditText;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
+    private boolean mDataChanged = false;
+    private int mChangePosition;
 
+    private static final String EXTRA_DATA_CHANGED = "data_changed";
+    private static final String EXTRA_CHANGE_POSITION = "change_position";
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
+        mChangePosition = CrimeLab.get(getActivity()).getPosition(mCrime);
     }
 
     public static CrimeFragment newInstance (UUID crimeId){
@@ -79,10 +86,19 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mCrime.setSolved(b);
+                mDataChanged = !mDataChanged;
             }
         });
 
         return view;
+    }
+
+    private void setActivityResult (boolean dataChanged){
+        Intent data = new Intent();
+        data.putExtra(EXTRA_DATA_CHANGED, dataChanged);
+        data.putExtra(EXTRA_CHANGE_POSITION, mChangePosition);
+
+        getActivity().setResult(Activity.RESULT_OK, data);
     }
 
 }
