@@ -46,4 +46,8 @@ public class CrimeLab {
         }
         return null;
     }
+
+    public int getPosition (Crime crime){
+        return mCrimes.indexOf(crime);
+    }
 }
