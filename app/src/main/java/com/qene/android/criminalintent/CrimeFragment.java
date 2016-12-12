@@ -32,6 +32,7 @@ public class CrimeFragment extends Fragment {
     private static final String EXTRA_DATA_CHANGED = "data_changed";
     private static final String EXTRA_CHANGE_POSITION = "change_position";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String DIALOG_TIME = "DialogTime";
     private static final int REQUEST_DATE = 0;
 
     private Crime mCrime;
@@ -102,10 +103,12 @@ public class CrimeFragment extends Fragment {
         });
 
         mTimeButton = (Button) view.findViewById(R.id.crime_time_button);
-        mTimeButton.setText(new Time(mCrime.getDate().getTime()).toString());
+        upDateTime();
         mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                TimePickerFragment fragment = new TimePickerFragment();
+                fragment.show(getFragmentManager(),DIALOG_TIME);
 
             }
         });
@@ -123,6 +126,9 @@ public class CrimeFragment extends Fragment {
         return view;
     }
 
+    private void upDateTime() {
+        mTimeButton.setText(new Time(mCrime.getDate().getTime()).toString());
+    }
 
 
     private void setActivityResult (){
