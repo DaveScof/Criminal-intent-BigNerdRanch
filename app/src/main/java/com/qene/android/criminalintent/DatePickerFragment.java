@@ -1,6 +1,7 @@
 package com.qene.android.criminalintent;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -18,6 +19,8 @@ import java.util.Date;
 
 public class DatePickerFragment extends DialogFragment {
     private static final String ARG_DATE = "date";
+    private static final String EXTRA_DATE = "com.qene.android.criminalintent.date";
+
     private DatePicker mDatePicker;
 
     @NonNull
@@ -54,5 +57,15 @@ public class DatePickerFragment extends DialogFragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    private void sendResult (int resultCode, Date date){
+        if (getTargetFragment() == null)
+            return;
+
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_DATE, date);
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 }
