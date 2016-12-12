@@ -108,9 +108,11 @@ public class CrimeFragment extends Fragment {
         mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TimePickerFragment fragment = TimePickerFragment.newInstance(new Time(mCrime.getDate().getTime()));
-                fragment.setTargetFragment(CrimeFragment.this,REQUEST_TIME);
-                fragment.show(getFragmentManager(),DIALOG_TIME);
+                TimePickerFragment dialog = TimePickerFragment.newInstance(new Time(mCrime.getDate().getTime()));
+                dialog.setTargetFragment(CrimeFragment.this,REQUEST_TIME);
+                dialog.show(getFragmentManager(),DIALOG_TIME);
+                mDataChanged = true;
+                setActivityResult();
 
             }
         });
