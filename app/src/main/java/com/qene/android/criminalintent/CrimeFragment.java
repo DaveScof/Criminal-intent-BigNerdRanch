@@ -72,6 +72,8 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mCrime.setTitle(charSequence.toString());
+                mDataChanged = true;
+                setActivityResult();
             }
 
             @Override
@@ -90,6 +92,8 @@ public class CrimeFragment extends Fragment {
                 DatePickerFragment dialog = DatePickerFragment.newInstance(mCrime.getDate());
                 dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
                 dialog.show(manager, DIALOG_DATE);
+                mDataChanged = true;
+                setActivityResult();
             }
         });
 
@@ -99,7 +103,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mCrime.setSolved(b);
-                mDataChanged = !mDataChanged;
+                mDataChanged = true;
                 setActivityResult();
             }
         });
