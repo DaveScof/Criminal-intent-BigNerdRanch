@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -81,7 +82,7 @@ public class CrimeFragment extends Fragment {
 
 
         mDateButton = (Button) view.findViewById(R.id.crime_date_button);
-        mDateButton.setText(mCrime.getDate().toString());
+        updateDate();
         mDateButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -124,4 +125,18 @@ public class CrimeFragment extends Fragment {
         return result.getIntExtra(EXTRA_CHANGE_POSITION, 0);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK)
+            return;
+
+        if (requestCode == REQUEST_DATE){
+            mCrime.setDate(DatePickerFragment.getDate(data));
+            updateDate();
+        }
+    }
+
+    private void updateDate() {
+        mDateButton.setText(mCrime.getDate().toString());
+    }
 }

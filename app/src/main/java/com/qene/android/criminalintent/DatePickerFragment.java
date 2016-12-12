@@ -1,6 +1,8 @@
 package com.qene.android.criminalintent;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,6 +14,7 @@ import android.widget.DatePicker;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by dave-5cof on 12/12/16.
@@ -46,7 +49,17 @@ public class DatePickerFragment extends DialogFragment {
         return new AlertDialog.Builder(getActivity())
                 .setView(view)
                 .setTitle(R.string.date_picker_title)
-                .setPositiveButton(android.R.string.ok, null)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        int day = mDatePicker.getDayOfMonth();
+                        int month = mDatePicker.getMonth();
+                        int year = mDatePicker.getYear();
+
+                        Date date = new GregorianCalendar(year,month,day).getTime();
+                        sendResult(Activity.RESULT_OK, date);
+                    }
+                })
                 .create();
     }
 
@@ -67,5 +80,9 @@ public class DatePickerFragment extends DialogFragment {
         intent.putExtra(EXTRA_DATE, date);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
+    }
+
+    public static Date getDate(Intent data) {
+        return (Date) data.getSerializableExtra(EXTRA_DATE);
     }
 }
