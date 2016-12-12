@@ -16,10 +16,10 @@ public class Crime {
     private Date mDate;
     private boolean mSolved;
 
-    public String getDate() {
+    public Date getDate() {
 
         // This should be edited out!! Seriously
-        return DateFormat.format("dd/mm/yyyy",mDate).toString();
+        return mDate;
     }
 
     public void setDate(Date date) {
