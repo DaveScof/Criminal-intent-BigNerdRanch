@@ -16,7 +16,10 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 /**
@@ -37,6 +40,7 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolvedCheckBox;
     private boolean mDataChanged = false;
     private int mChangePosition;
+    private Button mTimeButton;
 
 
     @Override
@@ -97,6 +101,14 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        mTimeButton = (Button) view.findViewById(R.id.crime_time_button);
+        mTimeButton.setText(new Time(mCrime.getDate().getTime()).toString());
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved_checkbox);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
