@@ -34,6 +34,7 @@ public class CrimeFragment extends Fragment {
     private static final String DIALOG_DATE = "DialogDate";
     private static final String DIALOG_TIME = "DialogTime";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_TIME = 1;
 
     private Crime mCrime;
     private EditText mEditText;
@@ -108,6 +109,7 @@ public class CrimeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 TimePickerFragment fragment = TimePickerFragment.newInstance(new Time(mCrime.getDate().getTime()));
+                fragment.setTargetFragment(CrimeFragment.this,REQUEST_TIME);
                 fragment.show(getFragmentManager(),DIALOG_TIME);
 
             }

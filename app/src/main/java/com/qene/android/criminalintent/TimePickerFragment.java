@@ -1,8 +1,10 @@
 package com.qene.android.criminalintent;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -14,7 +16,6 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by dave-5cof on 12/12/16.
@@ -22,14 +23,16 @@ import java.util.GregorianCalendar;
 
 public class TimePickerFragment extends DialogFragment {
     private TimePicker mTimePicker;
-    private static final String ARG_TIME = "time";
+    private static final String ARG_DATE = "time";
+    private static final String EXTRA_DATE = "com.qene.android.criminalintent.date";
+
 
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        Date date = (Date) getArguments().getSerializable(ARG_TIME);
+        Date date = (Date) getArguments().getSerializable(ARG_DATE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
@@ -58,7 +61,7 @@ public class TimePickerFragment extends DialogFragment {
 
     public static TimePickerFragment newInstance (Date date){
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TIME, date);
+        args.putSerializable(ARG_DATE, date);
 
         TimePickerFragment fragment = new TimePickerFragment();
         fragment.setArguments(args);
@@ -66,4 +69,14 @@ public class TimePickerFragment extends DialogFragment {
         return fragment;
     }
 
+
+    private void sendData(Date date){
+        if(getTargetFragment() == null)
+            return;
+
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_DATE, date);
+
+        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+    }
 }
