@@ -16,6 +16,7 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Created by dave-5cof on 12/12/16.
@@ -32,12 +33,12 @@ public class TimePickerFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        Date date = (Date) getArguments().getSerializable(ARG_DATE);
-        Calendar calendar = Calendar.getInstance();
+        final Date date = (Date) getArguments().getSerializable(ARG_DATE);
+        final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
         int hour = calendar.get(Calendar.HOUR);
-        int min = calendar.get(Calendar.MINUTE);
+        final int min = calendar.get(Calendar.MINUTE);
 
 
         View view = LayoutInflater.from(getActivity())
@@ -53,7 +54,14 @@ public class TimePickerFragment extends DialogFragment {
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        int year = calendar.get(Calendar.YEAR);
+                        int month = calendar.get(Calendar.MONTH);
+                        int day = calendar.get(Calendar.DAY_OF_MONTH);
+                        int hour = mTimePicker.getCurrentHour();
+                        int min = mTimePicker.getCurrentMinute();
 
+                        Date date = new GregorianCalendar(year,month,day,hour,min).getTime();
+                        sendData(date);
                     }
                 })
                 .create();
@@ -78,5 +86,9 @@ public class TimePickerFragment extends DialogFragment {
         intent.putExtra(EXTRA_DATE, date);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
+    }
+
+    public static Date getDate (Intent intent){
+        return (Date) intent.getSerializableExtra(EXTRA_DATE);
     }
 }

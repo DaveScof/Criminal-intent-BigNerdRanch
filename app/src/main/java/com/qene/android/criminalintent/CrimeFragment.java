@@ -128,11 +128,6 @@ public class CrimeFragment extends Fragment {
         return view;
     }
 
-    private void upDateTime() {
-        mTimeButton.setText(new Time(mCrime.getDate().getTime()).toString());
-    }
-
-
     private void setActivityResult (){
         Intent data = new Intent();
         data.putExtra(EXTRA_DATA_CHANGED, mDataChanged);
@@ -158,9 +153,18 @@ public class CrimeFragment extends Fragment {
             mCrime.setDate(DatePickerFragment.getDate(data));
             updateDate();
         }
+
+        if (requestCode == REQUEST_TIME){
+            mCrime.setDate(TimePickerFragment.getDate(data));
+            upDateTime();
+        }
     }
 
     private void updateDate() {
         mDateButton.setText(mCrime.getDate().toString());
+    }
+
+    private void upDateTime() {
+        mTimeButton.setText(new Time(mCrime.getDate().getTime()).toString());
     }
 }
