@@ -159,6 +159,7 @@ public class CrimeFragment extends Fragment {
         if (requestCode == REQUEST_TIME){
             mCrime.setDate(TimePickerFragment.getDate(data));
             upDateTime();
+            updateDate();
         }
     }
 
