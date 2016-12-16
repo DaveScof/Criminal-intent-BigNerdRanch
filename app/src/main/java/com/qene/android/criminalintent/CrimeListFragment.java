@@ -97,7 +97,6 @@ public class CrimeListFragment extends Fragment {
             mTitleTextView.setText(mCrime.getTitle());
             mDateTextView.setText(mCrime.getDate().toString());
             mSolvedCheckBox.setChecked(mCrime.isSolved());
-
         }
 
         @Override
@@ -163,6 +162,7 @@ public class CrimeListFragment extends Fragment {
             case (R.id.menu_item_new_crime):
                 Crime crime = new Crime();
                 CrimeLab.get(getActivity()).addCrime(crime);
+                mAdapter.notifyDataSetChanged();
                 Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
                 startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
                 return true;
