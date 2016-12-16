@@ -27,6 +27,7 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
 
     private static final int REQUEST_CODE_DATA_CHANGE = 0;
+    private static final String SAVE_SUBTITLE_VISIBLE = "saveSubtitlevisible";
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
@@ -35,6 +36,8 @@ public class CrimeListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null)
+            mSubtitleVisible = savedInstanceState.getBoolean(SAVE_SUBTITLE_VISIBLE);
         setHasOptionsMenu(true);
     }
 
@@ -62,6 +65,7 @@ public class CrimeListFragment extends Fragment {
         else {
             mAdapter.notifyItemChanged(changePosition);
         }
+        updateSubtitle();
     }
 
 
@@ -183,5 +187,11 @@ public class CrimeListFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
 
         activity.getSupportActionBar().setSubtitle(subtitle);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SAVE_SUBTITLE_VISIBLE, mSubtitleVisible);
     }
 }
