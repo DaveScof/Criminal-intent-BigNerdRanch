@@ -67,6 +67,10 @@ public class CrimeListFragment extends Fragment {
         }
         updateSubtitle();
     }
+    private void updateUI(){
+        if (mAdapter != null)
+            mAdapter.notifyDataSetChanged();
+    }
 
 
 
@@ -139,7 +143,10 @@ public class CrimeListFragment extends Fragment {
         if (requestCode == REQUEST_CODE_DATA_CHANGE){
             if (CrimeFragment.wasDataChanged(data))
                 updateUI(CrimeFragment.changedPosition(data));
+            if (CrimeFragment.resetAll(data))
+                updateUI();
         }
+
     }
 
     @Override
@@ -162,7 +169,7 @@ public class CrimeListFragment extends Fragment {
             case (R.id.menu_item_new_crime):
                 Crime crime = new Crime();
                 CrimeLab.get(getActivity()).addCrime(crime);
-                mAdapter.notifyDataSetChanged();
+                updateUI();
                 Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
                 startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
                 return true;
