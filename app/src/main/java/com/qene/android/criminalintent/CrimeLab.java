@@ -17,7 +17,6 @@ import java.util.UUID;
 public class CrimeLab {
 
     public static CrimeLab sCrimeLab;
-    private List<Crime> mCrimes;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -32,32 +31,26 @@ public class CrimeLab {
     private CrimeLab (Context context){
         mContext = context.getApplicationContext();
         mDatabase = new CrimeBaseHelper(mContext).getWritableDatabase();
-        mCrimes = new ArrayList<>();
-
     }
 
     public void addCrime(Crime crime){
-        mCrimes.add(crime);
+
     }
 
     public void deleteCrime (int crimeIndex){
-        mCrimes.remove(crimeIndex);
+
     }
 
     public List<Crime> getCrimes() {
-        return mCrimes;
+        return new ArrayList<>();
     }
 
     public Crime getCrime(UUID uuid) {
-        for (Crime crime: mCrimes) {
-            if (crime.getID().equals(uuid))
-                return crime;
-        }
         return null;
     }
 
     public int getPosition (Crime crime){
-        return mCrimes.indexOf(crime);
+        return 0;
     }
 
 }
