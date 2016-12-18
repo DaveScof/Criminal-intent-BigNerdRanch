@@ -50,6 +50,15 @@ public class CrimeListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mNoCrimesTextView = (TextView) view.findViewById(R.id.no_crimes_text_view);
+        mAddCrimeButton = (Button) view.findViewById(R.id.add_crime_button);
+        mAddCrimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                newCrime();
+            }
+        });
+
         updateUI(0);
         
         return view;
@@ -71,10 +80,15 @@ public class CrimeListFragment extends Fragment {
     private void updateUI(){
         if (mAdapter != null)
             mAdapter.notifyDataSetChanged();
-
+        if(CrimeLab.get(getActivity()).getCrimes().size() == 0) {
+            mAddCrimeButton.setVisibility(View.VISIBLE);
+            mNoCrimesTextView.setVisibility(View.VISIBLE);
+        }
+        else {
+            mAddCrimeButton.setVisibility(View.GONE);
+            mNoCrimesTextView.setVisibility(View.GONE);
+        }
     }
-
-
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
