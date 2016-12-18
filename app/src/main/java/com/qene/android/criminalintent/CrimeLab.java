@@ -26,13 +26,14 @@ public class CrimeLab {
 
     private CrimeLab (){
         mCrimes = new ArrayList<>();
-        for (int i = 1; i <= 100; i++) {
-            Random rand = new Random();
-            Crime crime = new Crime();
-            crime.setSolved(rand.nextInt(2) == 0);
-            crime.setTitle("Crime #" + i);
-            mCrimes.add(crime);
-        }
+    }
+
+    public void addCrime(Crime crime){
+        mCrimes.add(crime);
+    }
+
+    public void deleteCrime (int crimeIndex){
+        mCrimes.remove(crimeIndex);
     }
 
     public List<Crime> getCrimes() {
@@ -50,4 +51,5 @@ public class CrimeLab {
     public int getPosition (Crime crime){
         return mCrimes.indexOf(crime);
     }
+
 }

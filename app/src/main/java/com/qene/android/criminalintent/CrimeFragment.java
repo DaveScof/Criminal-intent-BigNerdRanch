@@ -9,6 +9,9 @@ import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,7 +19,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 /**
@@ -29,7 +36,10 @@ public class CrimeFragment extends Fragment {
     private static final String EXTRA_DATA_CHANGED = "data_changed";
     private static final String EXTRA_CHANGE_POSITION = "change_position";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String DIALOG_TIME = "DialogTime";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_TIME = 1;
+    private static final String EXTRA_RESET_ALL = "ResetAll";
 
     private Crime mCrime;
     private EditText mEditText;
@@ -37,6 +47,8 @@ public class CrimeFragment extends Fragment {
     private CheckBox mSolvedCheckBox;
     private boolean mDataChanged = false;
     private int mChangePosition;
+    private Button mTimeButton;
+    private boolean mResetAll = false;
 
 
     @Override
@@ -45,6 +57,7 @@ public class CrimeFragment extends Fragment {
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
         mChangePosition = CrimeLab.get(getActivity()).getPosition(mCrime);
+        setHasOptionsMenu(true);
     }
 
     public static CrimeFragment newInstance (UUID crimeId){
@@ -100,6 +113,19 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        mTimeButton = (Button) view.findViewById(R.id.crime_time_button);
+        upDateTime();
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerFragment dialog = TimePickerFragment.newInstance(new Time(mCrime.getDate().getTime()));
+                dialog.setTargetFragment(CrimeFragment.this,REQUEST_TIME);
+                dialog.show(getFragmentManager(),DIALOG_TIME);
+                mDataChanged = true;
+                setActivityResult();
+
+            }
+        });
         mSolvedCheckBox = (CheckBox) view.findViewById(R.id.crime_solved_checkbox);
         mSolvedCheckBox.setChecked(mCrime.isSolved());
         mSolvedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -114,13 +140,11 @@ public class CrimeFragment extends Fragment {
         return view;
     }
 
-
-
     private void setActivityResult (){
         Intent data = new Intent();
         data.putExtra(EXTRA_DATA_CHANGED, mDataChanged);
         data.putExtra(EXTRA_CHANGE_POSITION, mChangePosition);
-
+        data.putExtra(EXTRA_RESET_ALL, mResetAll);
         getActivity().setResult(Activity.RESULT_OK, data);
     }
 
@@ -141,9 +165,43 @@ public class CrimeFragment extends Fragment {
             mCrime.setDate(DatePickerFragment.getDate(data));
             updateDate();
         }
+
+        if (requestCode == REQUEST_TIME){
+            mCrime.setDate(TimePickerFragment.getDate(data));
+            upDateTime();
+            updateDate();
+        }
     }
 
     private void updateDate() {
-        mDateButton.setText(mCrime.getDate().toString());
+        mDateButton.setText(new SimpleDateFormat("MMM dd, yyyy").format(mCrime.getDate()));
+    }
+
+    private void upDateTime() {
+        mTimeButton.setText(new Time(mCrime.getDate().getTime()).toString());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_crime, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_item_delete_crime:
+                CrimeLab.get(getActivity()).deleteCrime(mChangePosition);
+                mResetAll = true;
+                setActivityResult();
+                getActivity().finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public static boolean resetAll(Intent data) {
+        return data.getBooleanExtra(EXTRA_RESET_ALL, false);
     }
 }
