@@ -14,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -32,6 +33,8 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+    private TextView mNoCrimesTextView;
+    private Button mAddCrimeButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -46,9 +49,7 @@ public class CrimeListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crime_list, container, false);
         mCrimeRecyclerView = (RecyclerView) view.findViewById(R.id.crime_recycler_view);
-
         mCrimeRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         updateUI(0);
         
         return view;
@@ -70,6 +71,7 @@ public class CrimeListFragment extends Fragment {
     private void updateUI(){
         if (mAdapter != null)
             mAdapter.notifyDataSetChanged();
+
     }
 
 
@@ -167,11 +169,7 @@ public class CrimeListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case (R.id.menu_item_new_crime):
-                Crime crime = new Crime();
-                CrimeLab.get(getActivity()).addCrime(crime);
-                updateUI();
-                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
-                startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
+                newCrime();
                 return true;
             case (R.id.menu_item_show_subtitle):
                 mSubtitleVisible = !mSubtitleVisible;
@@ -181,6 +179,14 @@ public class CrimeListFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void newCrime() {
+        Crime crime = new Crime();
+        CrimeLab.get(getActivity()).addCrime(crime);
+        updateUI();
+        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
+        startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
     }
 
     public void updateSubtitle(){
