@@ -88,6 +88,7 @@ public class CrimeListFragment extends Fragment {
             mAddCrimeButton.setVisibility(View.GONE);
             mNoCrimesTextView.setVisibility(View.GONE);
         }
+        updateSubtitle();
     }
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
