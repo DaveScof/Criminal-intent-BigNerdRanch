@@ -35,7 +35,8 @@ public class CrimeLab {
     }
 
     public void addCrime(Crime crime){
-
+        ContentValues values = getContentValues(crime);
+        mDatabase.insert(CrimeTable.NAME, null, values);
     }
 
     public void deleteCrime (int crimeIndex){
