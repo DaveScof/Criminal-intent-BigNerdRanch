@@ -204,4 +204,10 @@ public class CrimeFragment extends Fragment {
     public static boolean resetAll(Intent data) {
         return data.getBooleanExtra(EXTRA_RESET_ALL, false);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+    }
 }
