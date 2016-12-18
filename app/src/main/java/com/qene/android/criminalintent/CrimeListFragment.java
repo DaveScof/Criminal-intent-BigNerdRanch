@@ -60,7 +60,7 @@ public class CrimeListFragment extends Fragment {
         });
 
         updateUI(0);
-        
+        updateUI();
         return view;
     }
 
