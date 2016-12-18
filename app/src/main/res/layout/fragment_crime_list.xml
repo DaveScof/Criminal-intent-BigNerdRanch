@@ -11,14 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/add_crime_button"
-            android:text="@string/new_crime"
-          android:layout_below="@id/no_crimes_text_view"
-            android:layout_centerHorizontal="true"/>
-
         <TextView
             android:id="@+id/no_crimes_text_view"
             android:layout_width="wrap_content"
@@ -29,6 +21,13 @@
             android:textAllCaps="false"
             android:textStyle="normal|bold"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_crime_button"
+            android:text="@string/new_crime"
+          android:layout_below="@id/no_crimes_text_view"
+            android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 
