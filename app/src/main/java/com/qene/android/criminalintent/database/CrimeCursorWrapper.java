@@ -6,6 +6,9 @@ import android.database.CursorWrapper;
 import com.qene.android.criminalintent.Crime;
 import com.qene.android.criminalintent.database.CrimeDbSchema.CrimeTable;
 
+import java.util.Date;
+import java.util.UUID;
+
 /**
  * Created by dave-5cof on 12/19/16.
  */
@@ -21,7 +24,12 @@ public class CrimeCursorWrapper extends CursorWrapper {
         long date = getLong(getColumnIndex(CrimeTable.Cols.DATE));
         int isSolved = getInt(getColumnIndex(CrimeTable.Cols.SOLVED));
 
-        return null;
+        Crime crime = new Crime(UUID.fromString(uuidString));
+        crime.setTitle(title);
+        crime.setDate(new Date(date));
+        crime.setSolved(isSolved != 0);
+
+        return crime;
     }
 
 }
