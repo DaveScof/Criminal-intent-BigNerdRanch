@@ -50,6 +50,7 @@ public class CrimeFragment extends Fragment {
     private int mChangePosition;
     private Button mTimeButton;
     private boolean mResetAll = false;
+    private Button mSendButton;
 
 
     @Override
@@ -138,6 +139,19 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        mSendButton = (Button) view.findViewById(R.id.crime_report_button);
+        mSendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plain");
+                i.putExtra(Intent.EXTRA_TEXT, getCrimeReport());
+                i.putExtra(Intent.EXTRA_SUBJECT, R.string.crime_report_subject);
+
+                i = Intent.createChooser(i,getString(R.string.send_report));
+                startActivity(i);
+            }
+        });
         return view;
     }
 
