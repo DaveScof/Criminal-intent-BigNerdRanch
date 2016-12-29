@@ -3,6 +3,7 @@ package com.qene.android.criminalintent;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -41,6 +42,7 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_TIME = 1;
     private static final String EXTRA_RESET_ALL = "ResetAll";
+    private static final int REQUEST_CONTACT = 2;
 
     private Crime mCrime;
     private EditText mEditText;
@@ -51,6 +53,7 @@ public class CrimeFragment extends Fragment {
     private Button mTimeButton;
     private boolean mResetAll = false;
     private Button mSendButton;
+    private Button mSuspectButton;
 
 
     @Override
@@ -152,6 +155,21 @@ public class CrimeFragment extends Fragment {
                 startActivity(i);
             }
         });
+        final Intent pickContact = new Intent(Intent.ACTION_PICK,
+                ContactsContract.Contacts.CONTENT_URI);
+
+        mSuspectButton = (Button) view.findViewById(R.id.crime_suspect_button);
+        mSuspectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(pickContact, REQUEST_CONTACT);
+            }
+        });
+
+        if (mCrime.getSuspect() != null)
+        {
+            mSuspectButton.setText(mCrime.getSuspect());
+        }
         return view;
     }
 
@@ -227,7 +245,7 @@ public class CrimeFragment extends Fragment {
     }
 
     private String getCrimeReport(){
-        String solvedString = null;
+        String solvedString;
         if(mCrime.isSolved()){
             solvedString = getString(R.string.crime_report_solved);
         }
