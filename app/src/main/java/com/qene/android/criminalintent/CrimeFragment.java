@@ -249,6 +249,6 @@ public class CrimeFragment extends Fragment {
         String report = getString(R.string.crime_report,
                 mCrime.getTitle(), dateString, solvedString, suspect);
 
-        return suspect;
+        return report;
     }
 }
