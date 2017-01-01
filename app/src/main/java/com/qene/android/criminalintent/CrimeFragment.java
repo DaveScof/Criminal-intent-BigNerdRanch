@@ -1,7 +1,10 @@
 package com.qene.android.criminalintent;
 
 import android.app.Activity;
+import android.content.ContentProvider;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
@@ -203,6 +206,27 @@ public class CrimeFragment extends Fragment {
             mCrime.setDate(TimePickerFragment.getDate(data));
             upDateTime();
             updateDate();
+        }
+
+        if (requestCode == REQUEST_CONTACT && data != null){
+            Uri contactUri = data.getData();
+            String[] queryFeilds = new String[] {
+                    ContactsContract.Contacts.DISPLAY_NAME};
+
+            Cursor c = getActivity().getContentResolver().query(contactUri, queryFeilds, null, null, null);
+
+            try {
+                if (c.getCount() == 0)
+                    return;
+
+                c.moveToFirst();
+                String suspect = c.getString(0);
+                mCrime.setSuspect(suspect);
+                mSuspectButton.setText(suspect);
+            }
+            finally {
+                c.close();
+            }
         }
     }
 
