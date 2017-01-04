@@ -32,5 +32,4 @@ public class CrimeCursorWrapper extends CursorWrapper {
         crime.setSuspect(suspect);
         return crime;
     }
-
 }
