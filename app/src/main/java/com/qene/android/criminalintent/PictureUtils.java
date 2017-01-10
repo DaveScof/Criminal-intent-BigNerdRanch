@@ -32,7 +32,7 @@ public class PictureUtils {
         }
 
         options = new BitmapFactory.Options();
-        options.inSampleSize = inSampleSize;
+        options.inSampleSize = inSampleSize * 16;
 
         //Read in and create final bitmap
         return BitmapFactory.decodeFile(path, options);
