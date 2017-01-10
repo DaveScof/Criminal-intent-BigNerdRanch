@@ -5,6 +5,7 @@ import android.content.ContentProvider;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -189,7 +190,6 @@ public class CrimeFragment extends Fragment {
         }
 
         mPhotoButton = (ImageButton) view.findViewById(R.id.crime_camera);
-        mPhotoView = (ImageView) view.findViewById(R.id.crime_photo_IV);
 
         if (mCrime.getSuspect() != null)
         {
@@ -215,6 +215,10 @@ public class CrimeFragment extends Fragment {
                 startActivityForResult(captureImage, REQUEST_PHOTO);
             }
         });
+
+        mPhotoView = (ImageView) view.findViewById(R.id.crime_photo_IV);
+        updatePhotoView();
+
         return view;
     }
 
@@ -244,13 +248,13 @@ public class CrimeFragment extends Fragment {
             updateDate();
         }
 
-        if (requestCode == REQUEST_TIME){
+        else if (requestCode == REQUEST_TIME){
             mCrime.setDate(TimePickerFragment.getDate(data));
             upDateTime();
             updateDate();
         }
 
-        if (requestCode == REQUEST_CONTACT && data != null){
+        else if (requestCode == REQUEST_CONTACT && data != null){
             Uri contactUri = data.getData();
             String[] queryFeilds = new String[] {
                     ContactsContract.Contacts.DISPLAY_NAME};
@@ -269,6 +273,9 @@ public class CrimeFragment extends Fragment {
             finally {
                 c.close();
             }
+        }
+        else if (requestCode == REQUEST_PHOTO){
+            updatePhotoView();
         }
     }
 
@@ -334,5 +341,15 @@ public class CrimeFragment extends Fragment {
                 mCrime.getTitle(), dateString, solvedString, suspect);
 
         return report;
+    }
+
+    private void updatePhotoView (){
+        if (mPhotoFile == null || !mPhotoFile.exists()){
+            mPhotoView.setImageDrawable(null);
+        }
+        else {
+            Bitmap bitmap = PictureUtils.getScaledBitMap(mPhotoFile.getPath(), getActivity());
+            mPhotoView.setImageBitmap(bitmap);
+        }
     }
 }

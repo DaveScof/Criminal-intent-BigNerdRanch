@@ -1,7 +1,9 @@
 package com.qene.android.criminalintent;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 
 /**
  * Created by dave-5cof on 1/10/17.
@@ -34,5 +36,13 @@ public class PictureUtils {
 
         //Read in and create final bitmap
         return BitmapFactory.decodeFile(path, options);
+    }
+
+    public static Bitmap getScaledBitMap (String path, Activity activity){
+        Point size = new Point();
+        activity.getWindowManager().getDefaultDisplay()
+                .getSize(size);
+
+        return getScaledBitMap(path, size.x, size.y);
     }
 }
