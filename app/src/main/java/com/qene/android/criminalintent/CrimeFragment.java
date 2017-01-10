@@ -24,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.io.File;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,6 +49,7 @@ public class CrimeFragment extends Fragment {
     private static final int REQUEST_CONTACT = 2;
 
     private Crime mCrime;
+    private File mPhotoFile;
     private EditText mEditText;
     private Button mDateButton;
     private CheckBox mSolvedCheckBox;
@@ -59,6 +61,7 @@ public class CrimeFragment extends Fragment {
     private Button mSuspectButton;
 
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +69,7 @@ public class CrimeFragment extends Fragment {
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
         mChangePosition = CrimeLab.get(getActivity()).getPosition(mCrime);
         setHasOptionsMenu(true);
+        mPhotoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
     }
 
     public static CrimeFragment newInstance (UUID crimeId){
