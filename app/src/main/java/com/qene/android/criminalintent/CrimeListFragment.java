@@ -37,8 +37,6 @@ public class CrimeListFragment extends Fragment {
     private boolean mSubtitleVisible;
     private TextView mNoCrimesTextView;
     private Button mAddCrimeButton;
-    private ImageButton mPhotoButton;
-    private ImageView mPhotoView;
 
 
     @Override
@@ -63,8 +61,6 @@ public class CrimeListFragment extends Fragment {
                 newCrime();
             }
         });
-        mPhotoView = (ImageView) view.findViewById(R.id.crime_photo_IV);
-        mPhotoButton = (ImageButton) view.findViewById(R.id.crime_camera);
 
         updateUI(0);
         updateUI();

@@ -1,7 +1,6 @@
 package com.qene.android.criminalintent;
 
 import android.app.Activity;
-import android.content.ContentProvider;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -32,9 +31,6 @@ import android.widget.ImageView;
 import java.io.File;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.UUID;
 
 /**
@@ -48,6 +44,8 @@ public class CrimeFragment extends Fragment {
     private static final String EXTRA_CHANGE_POSITION = "change_position";
     private static final String DIALOG_DATE = "DialogDate";
     private static final String DIALOG_TIME = "DialogTime";
+    private static final String DIALOG_IMAGE = "ImageViewDialog";
+
     private static final int REQUEST_DATE = 0;
     private static final int REQUEST_TIME = 1;
     private static final String EXTRA_RESET_ALL = "ResetAll";
@@ -217,6 +215,15 @@ public class CrimeFragment extends Fragment {
         });
 
         mPhotoView = (ImageView) view.findViewById(R.id.crime_photo_IV);
+        mPhotoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPhotoFile == null)
+                    return;
+                ImageViewDialog imageViewDialog = ImageViewDialog.newInstance(mCrime.getTitle(), mPhotoFile);
+                imageViewDialog.show(getFragmentManager(),DIALOG_IMAGE);
+            }
+        });
         updatePhotoView();
 
         return view;
