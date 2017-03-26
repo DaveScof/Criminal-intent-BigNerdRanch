@@ -1,6 +1,7 @@
 package com.qene.android.criminalintent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -21,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -66,7 +68,17 @@ public class CrimeFragment extends Fragment {
     private ImageButton mPhotoButton;
     private ImageView mPhotoView;
 
+    private CallBack mCallBack;
 
+    public interface CallBack {
+        void onCrimeUpdated (Crime crime);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallBack = (CallBack) context;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -224,9 +236,28 @@ public class CrimeFragment extends Fragment {
                 imageViewDialog.show(getFragmentManager(),DIALOG_IMAGE);
             }
         });
-        updatePhotoView();
+        ViewTreeObserver observer = mPhotoView.getViewTreeObserver();
+        observer.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                updatePhotoView();
+            }
+        });
+
 
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        CrimeLab.get(getActivity()).updateCrime(mCrime);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBack = null;
     }
 
     private void setActivityResult (){
@@ -318,11 +349,7 @@ public class CrimeFragment extends Fragment {
         return data.getBooleanExtra(EXTRA_RESET_ALL, false);
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        CrimeLab.get(getActivity()).updateCrime(mCrime);
-    }
+
 
     private String getCrimeReport(){
         String solvedString;
@@ -355,7 +382,7 @@ public class CrimeFragment extends Fragment {
             mPhotoView.setImageDrawable(null);
         }
         else {
-            Bitmap bitmap = PictureUtils.getScaledBitMap(mPhotoFile.getPath(), getActivity());
+            Bitmap bitmap = PictureUtils.getScaledBitMap(mPhotoFile.getPath(), mPhotoView.getWidth(), mPhotoView.getHeight());
             mPhotoView.setImageBitmap(bitmap);
         }
     }

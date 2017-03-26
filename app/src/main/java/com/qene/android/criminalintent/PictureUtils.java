@@ -21,7 +21,7 @@ public class PictureUtils {
         float srcHeight = options.outHeight;
 
         //Figure out how much to scale down by
-        int inSampleSize = 1;
+        int inSampleSize = 5;
         if (srcHeight > destHeight || srcWidth > destWidth){
             if (srcWidth > srcHeight) {
                 inSampleSize = Math.round((srcHeight / destHeight));
@@ -32,7 +32,7 @@ public class PictureUtils {
         }
 
         options = new BitmapFactory.Options();
-        options.inSampleSize = inSampleSize * 16;
+        options.inSampleSize = inSampleSize;
 
         //Read in and create final bitmap
         return BitmapFactory.decodeFile(path, options);

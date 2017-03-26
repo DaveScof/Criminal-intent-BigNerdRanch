@@ -1,6 +1,7 @@
 package com.qene.android.criminalintent;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -38,6 +39,18 @@ public class CrimeListFragment extends Fragment {
     private TextView mNoCrimesTextView;
     private Button mAddCrimeButton;
 
+    private CallBack mCallBack;
+
+    public interface CallBack {
+        void onCrimeSelected (Crime crime);
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mCallBack = (CallBack) context;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +80,11 @@ public class CrimeListFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mCallBack = null;
+    }
 
 
     private class CrimeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -101,8 +119,9 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onClick(View view) {
-            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getID());
-            startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
+//            Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getID());
+//            startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
+            mCallBack.onCrimeSelected(mCrime);
         }
     }
 
@@ -189,8 +208,9 @@ public class CrimeListFragment extends Fragment {
         Crime crime = new Crime();
         CrimeLab.get(getActivity()).addCrime(crime);
         updateUI();
-        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
-        startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
+//        Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getID());
+//        startActivityForResult(intent, REQUEST_CODE_DATA_CHANGE);
+        mCallBack.onCrimeSelected(crime);
     }
 
     public void updateSubtitle(){
@@ -220,7 +240,7 @@ public class CrimeListFragment extends Fragment {
         }
         updateSubtitle();
     }
-    private void updateUI(){
+    public void updateUI(){
 
         if (mAdapter != null) {
             mAdapter.setCrimes(CrimeLab.get(getActivity()).getCrimes());
@@ -236,6 +256,7 @@ public class CrimeListFragment extends Fragment {
         }
         updateSubtitle();
     }
+
 
 
 }
